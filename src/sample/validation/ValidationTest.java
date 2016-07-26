@@ -1,6 +1,6 @@
 package sample.validation;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -24,15 +24,22 @@ import static sample.validation.Validation.ERR_MSG_INVALID_PASSWORD;
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
 
 /***
- * Userの検証を行う。 正常系のテスト：Userのプロパティが、下記の条件をすべて満たす。 ・nameが_文字以上_文字以内で、漢字であること。
+ * Userの検証を行う.
+ * 正常系のテスト：Userのプロパティが、下記の条件をすべて満たす。 
+ * ・nameが漢字であること。
+ * ・nameが空文字またはnullでないこと。
+ * ・nameが"賀来"であること。
+ * ・メールアドレスが空文字またはnullではないこと。
+ * ・メールアドレスが"kaku@rakus.co.jp"であること。
+ * ・パスワードが空文字またはnullではないこと。
+ * ・パスワードが"kakuakane"であること。
  *
  * 異常系のテスト：Userのプロパティが下記の場合を検証し、適切なエラーメッセージを返す。 検証値については{@link InputValue}を参照
  * 
- * 例） 検証値 期待値 new User("賀来","kaku@rakus.co.jp","aaaaaaaaa") パスワードの値が不正です
+ * 例） 検証値                                                                                                       期待値
+ *    new User("賀来","kaku@rakus.co.jp","aaaaaaaaa") パスワードの値が不正です
  * 
  * @author akane.kaku
  *
@@ -60,6 +67,7 @@ public class ValidationTest {
 	}
 
 	public static class 名前が不正なとき {
+		//エラーメッセージが複数Listに格納されるため最後に追加されたエラーメッセージと期待値を比較する
 		private List<String> errorMessageList = Validation.getErrorMessageList();
 
 		@Test
@@ -85,6 +93,7 @@ public class ValidationTest {
 	}
 
 	public static class メールアドレスが不正なとき {
+		//エラーメッセージが複数Listに格納されるため最後に追加されたエラーメッセージと期待値を比較する
 		private List<String> errorMessageList = Validation.getErrorMessageList();
 		
 		@Test
@@ -128,6 +137,7 @@ public class ValidationTest {
 	}
 
 	public static class パスワードが不正なとき {
+		//エラーメッセージが複数Listに格納されるため最後に追加されたエラーメッセージと期待値を比較する
 		private List<String> errorMessageList = Validation.getErrorMessageList();
 
 		@Test

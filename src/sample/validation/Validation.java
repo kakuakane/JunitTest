@@ -28,10 +28,18 @@ public class Validation {
 	public static List<String> errorMessageList = new ArrayList<>();
 	// private static Boolean hasError = false;
 
+	/**
+	 * エラーがあるかを判断する.
+	 * @return エラーがなければfalseを返す
+	 */
 	public static Boolean hasError() {
 		return errorMessageList.isEmpty() == false;
 	}
 
+	/**
+	 * エラーメッセージを返す.
+	 * @return エラーメッセージ
+	 */
 	public static List<String> getErrorMessageList() {
 		return errorMessageList;
 	}
