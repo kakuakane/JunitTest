@@ -37,7 +37,6 @@ import org.junit.runner.RunWith;
  * @author akane.kaku
  *
  */
-@RunWith(Enclosed.class)
 public class ValidationTest {
 	public static class 値が正しいとき {
 
@@ -67,7 +66,7 @@ public class ValidationTest {
 		public void 名前に不正な値を入力してエラーが返る() {
 			Validation.nameCheck(NOT_MATCH_NAME);
 			assertTrue(Validation.hasError());
-			assertThat(Validation.getErrorMessageList().get(0), is(ERR_MSG_INVALID_NAME));
+			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_INVALID_NAME));
 		}
 
 		@Test
@@ -86,33 +85,28 @@ public class ValidationTest {
 	}
 
 	public static class メールアドレスが不正なとき {
-
+		private List<String> errorMessageList = Validation.getErrorMessageList();
+		
 		@Test
 		public void メールアドレスに異なる値を入力してエラーが返る() {
 			Validation.emailCheck(NOT_MATCH_EMAIL);
-			System.out.println("notmatchemail.errorsize is\f" + Validation.getErrorMessageList().size());
-			System.out.println(Validation.getErrorMessageList().get(0));
-			System.out.println(Validation.getErrorMessageList().get(1));
-			System.out.println(Validation.getErrorMessageList().get(2));
-
+			System.out.println("notmatchemail.errorsize is\f" + errorMessageList.size());
 			assertTrue(Validation.hasError());
-			assertThat(Validation.getErrorMessageList().get(Validation.getErrorMessageList().size()-1), is(ERR_MSG_INVALID_EMAIL));
+			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_INVALID_EMAIL));
 		}
 
 		@Test
 		public void メールアドレスが空文字でエラーが返る() {
 			Validation.emailCheck(EMPTY_EMAIL);
 			assertTrue(Validation.hasError());
-			assertThat(Validation.getErrorMessageList().size()-1, is(ERR_MSG_EMPTY_EMAIL));
+			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_EMPTY_EMAIL));
 		}
 
 		@Test
 		public void メールアドレスが未入力でエラーが返る() {
 			Validation.emailCheck(NULL_EMAIL);
-			
-			System.out.println(Validation.getErrorMessageList().get(Validation.getErrorMessageList().size()-1));
 			assertTrue(Validation.hasError());
-			assertThat(Validation.getErrorMessageList().get(Validation.getErrorMessageList().size()-1), is(ERR_MSG_EMPTY_EMAIL));
+			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_EMPTY_EMAIL));
 		}
 
 		// @Test
