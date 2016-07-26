@@ -13,81 +13,79 @@ import sample.common.User;
  */
 public class Validation {
 	// VALID PROPERTY
-	private static final String VALID_EMAIL_ADDRESS= "kaku@rakus.co.jp";
-	
-	
-	
+	private static final String VALID_NAME = "賀来";
+	private static final String VALID_EMAIL = "kaku@rakus.co.jp";
+	private static final String VALID_PASSWORD = "kakuakane";
+
 	// ERROR MESSAGES
 	public static final String ERR_MSG_EMPTY_NAME = "名前を入力してください";
-	
-	
-	
-	
-	private static List<String> errorMessageList = new ArrayList<>();
-//	private static Boolean hasError = false;
-	
-	
-	
-	public Boolean hasError(){
+	public static final String ERR_MSG_INVALID_NAME = "名前が不正です";
+	public static final String ERR_MSG_INVALID_EMAIL = "メールアドレスが不正です";
+	public static final String ERR_MSG_EMPTY_EMAIL = "メールアドレスを入力してください";
+	public static final String ERR_MSG_INVALID_PASSWORD = "パスワードが違います";
+	public static final String ERR_MSG_EMPTY_PASSWORD = "パスワードを入力してください";
+
+	public static List<String> errorMessageList = new ArrayList<>();
+	// private static Boolean hasError = false;
+
+	public static Boolean hasError() {
 		return errorMessageList.isEmpty() == false;
 	}
-	
-	public List<String> getErrorMessageList(){
+
+	public static List<String> getErrorMessageList() {
 		return errorMessageList;
 	}
-
 	/**
-	 * 名前の入力値チェック
+	 * 名前の入力チェック
 	 * 
 	 * @param user
-	 * @return
 	 */
-	public static String nameCheck(User user) {
+	public static void nameCheck(User user) {
 		if (user.getName() == null || user.getName().length() == 0) {
-			return ERR_MSG_EMPTY_NAME;
-		} else if (!(user.getName().equals("賀来"))) {
-			return "入力された名前が不正です";
+			errorMessageList.add(ERR_MSG_EMPTY_NAME);
+		} else if (!(user.getName().equals(VALID_NAME))) {
+			errorMessageList.add(ERR_MSG_INVALID_NAME);
 		}
-		return null;
 	}
 
 	/**
-	 * メールアドレスのチェック
+	 * メールアドレスの入力チェック
 	 * 
 	 * @param user
-	 * @return
 	 */
-	private final Integer MAIL_MAX_LENGTH = 2;
 
-	public static String emailCheck(User user) {
+	public static void emailCheck(User user) {
 		if (user.getEmail() == null || user.getEmail().length() == 0) {
-			errorMessageList.add("メールアドレスを入力してください");
-		} else if (user.getEmail().indexOf("@") == -1 && user.getEmail().indexOf(".") == -1) {
-			return "メールアドレスの形式が不正です";
-		//正規表現チェック
-		} else if (user.getEmail().length() <= 2) {
-			return "メールアドレスの値が不正です";
-		} else if (!(user.getEmail().equals(VALID_EMAIL_ADDRESS))) {
-			return "メールアドレスが違います";
+			errorMessageList.add(ERR_MSG_EMPTY_EMAIL);
+		} else if (!(user.getEmail().equals(VALID_EMAIL))) {
+			errorMessageList.add(ERR_MSG_INVALID_EMAIL);
 		}
-		return null;
+		// 正規表現チェック
+
+		// private final Integer MAIL_MAX_LENGTH = 2;
+		// } else if (user.getEmail().indexOf("@") == -1 &&
+		// user.getEmail().indexOf(".") == -1) {
+		// return "メールアドレスの形式が不正です";
+		// } else if (user.getEmail().length() <= 2) {
+		// return "メールアドレスの値が不正です";
+		// }
+		// return null;
 	}
 
 	/**
-	 * パスワードのチェック
+	 * パスワードの入力チェック
 	 * 
 	 * @param user
-	 * @return
 	 */
-	public static String passCheck(User user) {
-
+	public static void passCheck(User user) {
 		if (user.getPassword() == null || user.getPassword().length() == 0) {
-			return "パスワードを入力してください";
-		} else if (user.getPassword().length() < 8 && user.getPassword().length() > 16) {
-			return "パスワードは8文字以上16文字以内で入力してください";
-		} else if (!(user.getPassword().equals("kakuakane"))) {
-			return "パスワードが違います";
+			errorMessageList.add(ERR_MSG_EMPTY_PASSWORD);
+		} else if (!(user.getPassword().equals(VALID_PASSWORD))) {
+			errorMessageList.add(ERR_MSG_INVALID_PASSWORD);
 		}
+		// } else if (user.getPassword().length() < 8 &&
+		// user.getPassword().length() > 16) {
+		// return "パスワードは8文字以上16文字以内で入力してください";
 		// TODO:パスワードのセキュリティ強化.半角英数字記号を含める
 
 		// for (char temp : user.getPassword().toCharArray()) {
@@ -99,7 +97,5 @@ public class Validation {
 		// } else if (!(temp >= '0' && temp <= '9')) {
 		// check = false;
 		// }
-
-		return null;
 	}
 }

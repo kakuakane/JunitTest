@@ -2,8 +2,6 @@ package sample.api;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -60,34 +58,16 @@ public class ApiServlet extends HttpServlet {
 		user.setEmail(email);
 		user.setPassword(password);
 		// Validation
-		String nameCheck = Validation.nameCheck(user);
-		String emailCheck = Validation.emailCheck(user);
-		String passCheck = Validation.passCheck(user);
-		System.out.println("validationのチェック" + nameCheck);
-		List<String> errorList = new ArrayList<>();
-		boolean check = true;
-		if (!(nameCheck == null)) {
-			System.out.println("nameCheckのエラー");
-			errorList.add(nameCheck);
-			check = false;
-		}
-		if (!(emailCheck == null)) {
-			System.out.println("emailCheckのエラー");
-			errorList.add(emailCheck);
-			check = false;
-		}
-		if (!(passCheck == null)) {
-			System.out.println("passCheckのエラー");
-			errorList.add(passCheck);
-			check = false;
-		}
-
-		if (check) {
+		Validation.nameCheck(user);
+		Validation.emailCheck(user);
+		Validation.passCheck(user);
+		if (!Validation.hasError()) {
 			request.setAttribute("result", "認証成功");
 			// RequestDispatcher rd =
 			// request.getRequestDispatcher("/result.jsp");
 			// rd.forward(request, response);
-		} else {
+		}
+		if (Validation.hasError()) {
 			request.setAttribute("result", "認証失敗");
 			// RequestDispatcher rd = request.getRequestDispatcher("/test.jsp");
 			// rd.forward(request, response);
