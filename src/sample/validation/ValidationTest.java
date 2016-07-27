@@ -1,6 +1,6 @@
 package sample.validation;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -23,14 +23,14 @@ import static sample.validation.Validation.ERR_MSG_INVALID_PASSWORD;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
+
+import sample.api.UserApiServlet;
 
 /***
  * Userの検証を行う.
  * 正常系のテスト：Userのプロパティが、下記の条件をすべて満たす。 
- * ・nameが漢字であること。
- * ・nameが空文字またはnullでないこと。
- * ・nameが"賀来"であること。
  * ・メールアドレスが空文字またはnullではないこと。
  * ・メールアドレスが"kaku@rakus.co.jp"であること。
  * ・パスワードが空文字またはnullではないこと。
@@ -65,18 +65,32 @@ public class ValidationTest {
 			assertFalse(Validation.hasError());
 		}
 	}
-
+/*
+ * 
+ */
 	public static class 名前が不正なとき {
 		//エラーメッセージが複数Listに格納されるため最後に追加されたエラーメッセージと期待値を比較する
 		private List<String> errorMessageList = Validation.getErrorMessageList();
 
+		/* 名前に不正な値を入力してエラーが返る
+		 * テスト項目					検証値											期待値
+		 * ・nameが漢字ではない			new User("aaa","kaku@rakus.co.jp","kakuakane")。	パスワードの値が不正です
+		 */
 		@Test
 		public void 名前に不正な値を入力してエラーが返る() {
+			URLValue url = URLBuilder("aaa","kaku@rakus.co.jp","kakuakane");
+			//http://localhost:8080/JunitTest/UserApiServlet?name=%E8%B3%80%E6%9D%A5&email=aaa&password=fff
+			Htppclient cli = new HttpClient();
+			String responseMessageJson = cli.GET(url);
+			String message = JSONIC.decode(responseMessageJson); //TODO 面倒かも。。。
 			Validation.nameCheck(NOT_MATCH_NAME);
 			assertTrue(Validation.hasError());
-			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_INVALID_NAME));
+			assertThat(message, is(ERR_MSG_INVALID_NAME));
 		}
 
+		/* テスト項目					検証値											期待値
+		 * ・nameが空文字			new User("","kaku@rakus.co.jp","kakuakane")。	名前を入力してください
+		 */
 		@Test
 		public void 名前が空文字でエラーが返る() {
 			Validation.nameCheck(EMPTY_NAME);
@@ -84,6 +98,9 @@ public class ValidationTest {
 			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_EMPTY_NAME));
 		}
 
+		/* テスト項目					検証値											期待値
+		 * ・nameが空文字			new User("","kaku@rakus.co.jp","kakuakane")。	名前を入力してください
+		 */
 		@Test
 		public void 名前が未入力でエラーが返る() {
 			Validation.nameCheck(NULL_NAME);

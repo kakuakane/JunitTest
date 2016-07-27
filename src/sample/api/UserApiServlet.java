@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.arnx.jsonic.JSON;
 import sample.common.ResultMessage;
 import sample.common.User;
+import sample.common.ValidationResponse;
 import sample.validation.Validation;
 
 /**
@@ -54,27 +55,52 @@ public class UserApiServlet extends HttpServlet{
 		String password = request.getParameter("password");
 		System.out.println("formの受け取り" + name);
 
-//		User user = new User();
-//		user.setName(name);
-//		user.setEmail(email);
-//		user.setPassword(password);
-//		// Validation
-//		Validation.nameCheck(user);
-//		Validation.emailCheck(user);
-//		Validation.passCheck(user);
-//		if (!Validation.hasError()) {
-//			String responseJson = JSON.encode(new ResultMessage("認証成功"));
-////			request.setAttribute("result", "認証成功");
-//			// RequestDispatcher rd =
-//			// request.getRequestDispatcher("/result.jsp");
-//			// rd.forward(request, response);
-//		}
-//		if (Validation.hasError()) {
-//			request.setAttribute("result", "認証失敗");
-//			// RequestDispatcher rd = request.getRequestDispatcher("/test.jsp");
-//			// rd.forward(request, response);
-//		}
-//
+		User user = new User();
+		user.setName(name);
+		user.setEmail(email);
+		user.setPassword(password);
+		// Validation
+		Validation.listReset();	//レスポンスメッセージの初期化
+		Validation.nameCheck(user);
+		Validation.emailCheck(user);
+		Validation.passCheck(user);
+		Validation.getErrorMessageList();
+		if (!(Validation.hasError())) {
+			System.out.println("成功");
+			System.out.println("vv");
+			String responseJson = JSON.encode(new ResultMessage("認証成功"));
+			response.setContentType("application/json;charaset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.print(responseJson);
+//			request.setAttribute("result", "認証成功");
+			// RequestDispatcher rd =
+			// request.getRequestDispatcher("/result.jsp");
+			// rd.forward(request, response);
+		}
+		if (Validation.hasError()) {
+			System.out.println("失敗");
+			System.out.println(Validation.hasError());
+			System.out.println(user.getEmail());
+			System.out.println(user.getPassword());
+//			String responseJson = JSON.encode(new ResultMessage("認証失敗"));
+//			response.setContentType("application/json;charset=UTF-8");
+//			PrintWriter out = response.getWriter();
+//			out.print(responseJson);
+			
+			//エラーメッセージの表示
+			String resJson = JSON.encode(Validation.getErrorMessageList());
+			response.setContentType("application/json;charset=UTF-8");
+			PrintWriter pw = response.getWriter();
+//			for (String error : Validation.getErrorMessageList()) {
+//				String errorList = error +"\r\n";
+//				System.out.println(errorList);
+//				pw.print(errorList);
+//			}
+			pw.print(resJson);
+			// RequestDispatcher rd = request.getRequestDispatcher("/test.jsp");
+			// rd.forward(request, response);
+		}
+
 //		System.out.println("API");
 //		String responseJson = JSON.encode(new Message("failure"));
 //		response.setContentType("application/json;charset=UTF-8");

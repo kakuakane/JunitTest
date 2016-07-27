@@ -22,7 +22,7 @@ public class Validation {
 	public static final String ERR_MSG_INVALID_NAME = "名前が不正です";
 	public static final String ERR_MSG_INVALID_EMAIL = "メールアドレスが不正です";
 	public static final String ERR_MSG_EMPTY_EMAIL = "メールアドレスを入力してください";
-	public static final String ERR_MSG_INVALID_PASSWORD = "パスワードが違います";
+	public static final String ERR_MSG_INVALID_PASSWORD = "パスワードが不正です";
 	public static final String ERR_MSG_EMPTY_PASSWORD = "パスワードを入力してください";
 
 	public static List<String> errorMessageList = new ArrayList<>();
@@ -42,6 +42,10 @@ public class Validation {
 	 */
 	public static List<String> getErrorMessageList() {
 		return errorMessageList;
+	}
+	
+	public static void listReset(){
+		errorMessageList.clear();
 	}
 	/**
 	 * 名前の入力チェック

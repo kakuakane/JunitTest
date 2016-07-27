@@ -1,13 +1,12 @@
 package sample.common;
 
 public class ResultMessage {
-private String message;
-
-public String getMessage() {
-	return message;
-}
-
-public void setMessage(String message) {
-	this.message = message;
-}
+	private String message;
+	
+	public ResultMessage(String msg) {
+		message = msg;
+	}
+	public String getMessage() {
+		return message;
+	}
 }

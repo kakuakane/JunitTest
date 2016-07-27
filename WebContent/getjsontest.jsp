@@ -10,6 +10,7 @@
 <script type="text/javascript">
 $(function(){
 	$("#sendButton").click(function(){
+ 	$('.responseMessage').empty();
 		var name = $("#name").val();
 		var email = $("#email").val();
 		var password = $("#password").val();
@@ -18,10 +19,17 @@ $(function(){
 				"email":email,
 				"password":password
 		}
-		$.getJSON("/JunitTest/UserApiServlet",data,function(data){
-			var result=data.message;
-			$("#responseMessage").append("<span style='color:red'>"+msg+"</span>");
-		})
+		$.getJSON("/JunitTest/UserApiServlet",data,function(jsondata){
+// 			var result=data.message;
+// 			$("#responseMessage").append("<span style='color:red'>"+result+"</span>");
+for(i = 0; i < jsondata.length; i++){
+			var errorMsg = jsondata[i];
+			$("#errorMessage").append("<div style='color:red'>"+errorMsg+"</div>");
+}
+			
+		}).done(function(data){
+			$("#responseMessage").load(data);
+		});
 	})
 })
 </script>
@@ -47,7 +55,8 @@ $(function(){
 	<input id="sendButton" type="button" value="送信">
 </div>
 <div>
-<p id="responseMessage"></p>
+<div id="successMessage" class="responseMessage"></div>
+<div id="errorMessage" class="responseMessage"></div>
 </div>
 	
 </body>
