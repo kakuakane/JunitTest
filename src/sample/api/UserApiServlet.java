@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.arnx.jsonic.JSON;
 import sample.common.ResultMessage;
 import sample.common.User;
-import sample.common.ValidationResponse;
 import sample.validation.Validation;
 
 /**

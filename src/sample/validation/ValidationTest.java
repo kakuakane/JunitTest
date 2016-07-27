@@ -47,6 +47,9 @@ import sample.api.UserApiServlet;
 public class ValidationTest {
 	public static class 値が正しいとき {
 
+		/**
+		 * 
+		 */
 		@Test
 		public void 名前に正しい値を入力して正しい結果が返る() {
 			Validation.nameCheck(RIGHT_USER);
@@ -74,7 +77,7 @@ public class ValidationTest {
 
 		/* 名前に不正な値を入力してエラーが返る
 		 * テスト項目					検証値											期待値
-		 * ・nameが漢字ではない			new User("aaa","kaku@rakus.co.jp","kakuakane")。	パスワードの値が不正です
+		 * ・nameが漢字ではない			new User("aaa","kaku@rakus.co.jp","kakuakane")	パスワードの値が不正です
 		 */
 		@Test
 		public void 名前に不正な値を入力してエラーが返る() {
