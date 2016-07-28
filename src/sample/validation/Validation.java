@@ -2,6 +2,8 @@ package sample.validation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import sample.common.User;
 
@@ -9,6 +11,10 @@ import sample.common.User;
  * 入力値チェック.
  * 
  * @author akane.kaku
+ *
+ */
+/**
+ * @author rks_user
  *
  */
 public class Validation {
@@ -22,14 +28,17 @@ public class Validation {
 	public static final String ERR_MSG_INVALID_NAME = "名前が不正です";
 	public static final String ERR_MSG_INVALID_EMAIL = "メールアドレスが不正です";
 	public static final String ERR_MSG_EMPTY_EMAIL = "メールアドレスを入力してください";
+	public static final String ERR_MSG_REJEX_EMAIL = "メールアドレスの形式が不正です";
 	public static final String ERR_MSG_INVALID_PASSWORD = "パスワードが違います";
 	public static final String ERR_MSG_EMPTY_PASSWORD = "パスワードを入力してください";
+	public static final String ERR_MSG_REJEX_PASSWORD ="パスワードは半角英数字記号すべて含めてください";
 
 	public static List<String> errorMessageList = new ArrayList<>();
 	// private static Boolean hasError = false;
 
 	/**
-	 * エラーがあるかを判断する.
+	 * エラーがあるかを判断する
+	 * 
 	 * @return エラーがなければfalseを返す
 	 */
 	public static Boolean hasError() {
@@ -37,38 +46,41 @@ public class Validation {
 	}
 
 	/**
-	 * エラーメッセージを返す.
+	 * エラーメッセージを返す
+	 * 
 	 * @return エラーメッセージ
 	 */
 	public static List<String> getErrorMessageList() {
 		return errorMessageList;
 	}
-	
-	public static void listReset(){
+
+	/**
+	 * リストの中身を空にする
+	 */
+	public static void listReset() {
 		errorMessageList.clear();
 	}
+
 	/**
 	 * 名前の入力チェック
 	 * 
 	 * @param user
 	 */
 	public static void nameCheck(User user) {
-		//empty or null
-		
-		//length
-		
-		//format(全角)
-		
-		//multiple(?)
-		
-		//valid
-		
-		
+		// empty or null
 		if (user.getName() == null || user.getName().length() == 0) {
 			errorMessageList.add(ERR_MSG_EMPTY_NAME);
+			// valid
 		} else if (!(user.getName().equals(VALID_NAME))) {
 			errorMessageList.add(ERR_MSG_INVALID_NAME);
+			// length
+		} else if (user.getName().length() > 10) {
+			errorMessageList.add("e");
+			// multiple(?)
 		}
+
+		// format(全角)
+
 	}
 
 	/**
@@ -78,8 +90,10 @@ public class Validation {
 	 */
 
 	public static void emailCheck(User user) {
+		// empty or null
 		if (user.getEmail() == null || user.getEmail().length() == 0) {
 			errorMessageList.add(ERR_MSG_EMPTY_EMAIL);
+			// valid
 		} else if (!(user.getEmail().equals(VALID_EMAIL))) {
 			errorMessageList.add(ERR_MSG_INVALID_EMAIL);
 		}
@@ -93,6 +107,7 @@ public class Validation {
 		// return "メールアドレスの値が不正です";
 		// }
 		// return null;
+		
 	}
 
 	/**
@@ -106,19 +121,27 @@ public class Validation {
 		} else if (!(user.getPassword().equals(VALID_PASSWORD))) {
 			errorMessageList.add(ERR_MSG_INVALID_PASSWORD);
 		}
+	}
 		// } else if (user.getPassword().length() < 8 &&
 		// user.getPassword().length() > 16) {
 		// return "パスワードは8文字以上16文字以内で入力してください";
-		// TODO:パスワードのセキュリティ強化.半角英数字記号を含める
 
-		// for (char temp : user.getPassword().toCharArray()) {
-		// if (!(temp >= '!' && temp <= '~')) {
-		// if (temp >= 'A' && temp <= 'Z') {
-		// check = false;
-		// } else if (!(temp >= 'a' && temp <= 'z')) {
-		// check = true;
-		// } else if (!(temp >= '0' && temp <= '9')) {
-		// check = false;
-		// }
+
+	public static void regexPass(User user) {
+//		パスワードのセキュリティ強化.半角英数字記号を含める
+		Pattern p = Pattern.compile("(?!^[^0-9]*$)(?!^[^a-z]*$)(?!^[^A-Z]*$)(?!^[^-_.]*$)^([a-zA-Z0-9-_-]+)$");
+		Matcher m = p.matcher(user.getPassword());
+		if (!(m.find())) {
+			errorMessageList.add(ERR_MSG_REJEX_PASSWORD);
+		}
+	}
+	
+	public static void regexEmail(User user){
+//		メールアドレスの形式
+		Pattern p = Pattern.compile("[\\w\\.\\-]+@(?:[\\w\\-]+\\.)+[\\w\\-]+");
+		Matcher m = p.matcher(user.getEmail());
+		if (!(m.find())) {
+			errorMessageList.add(ERR_MSG_REJEX_EMAIL);
+		}
 	}
 }
