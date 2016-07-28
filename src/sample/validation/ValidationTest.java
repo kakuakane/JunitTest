@@ -14,21 +14,15 @@ import static sample.validation.InputValue.NULL_EMAIL;
 import static sample.validation.InputValue.NULL_NAME;
 import static sample.validation.InputValue.NULL_PASSWORD;
 import static sample.validation.InputValue.RIGHT_USER;
-import static sample.validation.Validation.ERR_MSG_EMPTY_EMAIL;
-import static sample.validation.Validation.ERR_MSG_EMPTY_NAME;
-import static sample.validation.Validation.ERR_MSG_EMPTY_PASSWORD;
-import static sample.validation.Validation.ERR_MSG_INVALID_EMAIL;
-import static sample.validation.Validation.ERR_MSG_INVALID_NAME;
-import static sample.validation.Validation.ERR_MSG_INVALID_PASSWORD;
+import static sample.validation.Validation.*;
+
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import sample.api.UserApiServlet;
 import sample.common.User;
-
 /***
  * 入力値の検証を行う.
  * 正常系のテスト：Userのプロパティが、下記の条件をすべて満たす。 
@@ -43,6 +37,7 @@ import sample.common.User;
  *
  */
 public class ValidationTest {
+
 	//エラーメッセージが複数Listに格納されるため最後に追加されたエラーメッセージと期待値を比較する
 			private List<String> errorMessageList = Validation.getErrorMessageList();
 	/**
@@ -84,8 +79,7 @@ public class ValidationTest {
 			Validation.passCheck(RIGHT_USER);
 			assertFalse(Validation.hasError());
 		}
-	
-		 
+
 		/**
 		 * 正誤チェック
 		 * テスト項目							検証値											期待値
@@ -93,9 +87,16 @@ public class ValidationTest {
 		 */
 		@Test
 		public void 名前に不正な値を入力してエラーが返る() {
-			Validation.nameCheck(NOT_MATCH_NAME);
+
+//			URLValue url = URLBuilder("aaa","kaku@rakus.co.jp","kakuakane");
+			//http://localhost:8080/JunitTest/UserApiServlet?name=%E8%B3%80%E6%9D%A5&email=aaa&password=fff
+//			Htppclient cli = new HttpClient();
+//			String responseMessageJson = cli.GET(url);
+//			String message = JSONIC.decode(responseMessageJson); //TODO 面倒かも。。。
 			assertTrue(Validation.hasError());
-			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_INVALID_NAME));
+//			assertThat(message, is(ERR_MSG_INVALID_NAME));
+			Validation.nameCheck(NOT_MATCH_NAME);
+			assertThat(errorMessageList.get(0), is(ERR_MSG_INVALID_NAME));
 		}
 
 		/**
@@ -107,7 +108,7 @@ public class ValidationTest {
 		public void 名前が空文字でエラーが返る() {
 			Validation.nameCheck(EMPTY_NAME);
 			assertTrue(Validation.hasError());
-			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_EMPTY_NAME));
+			assertThat(errorMessageList.get(0), is(ERR_MSG_EMPTY_NAME));
 		}
 
 		/** 
@@ -119,7 +120,7 @@ public class ValidationTest {
 		public void 名前が未入力でエラーが返る() {
 			Validation.nameCheck(NULL_NAME);
 			assertTrue(Validation.hasError());
-			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_EMPTY_NAME));
+			assertThat(errorMessageList.get(0), is(ERR_MSG_EMPTY_NAME));
 		}
 		
 		/**
@@ -139,7 +140,7 @@ public class ValidationTest {
 		 * 
 		 */
 		@Test
-		public void 複数のエラーが出る(){
+		public void 名前とメールアドレスのエラーが出る(){
 			
 		}
 			
@@ -153,7 +154,7 @@ public class ValidationTest {
 			Validation.emailCheck(NOT_MATCH_EMAIL);
 			System.out.println("notmatchemail.errorsize is\f" + errorMessageList.size());
 			assertTrue(Validation.hasError());
-			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_INVALID_EMAIL));
+			assertThat(errorMessageList.get(0), is(ERR_MSG_INVALID_EMAIL));
 		}
 
 		/**
@@ -165,7 +166,7 @@ public class ValidationTest {
 		public void メールアドレスが空文字でエラーが返る() {
 			Validation.emailCheck(EMPTY_EMAIL);
 			assertTrue(Validation.hasError());
-			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_EMPTY_EMAIL));
+			assertThat(errorMessageList.get(0), is(ERR_MSG_EMPTY_EMAIL));
 		}
 
 		/**
@@ -177,7 +178,7 @@ public class ValidationTest {
 		public void メールアドレスが未入力でエラーが返る() {
 			Validation.emailCheck(NULL_EMAIL);
 			assertTrue(Validation.hasError());
-			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_EMPTY_EMAIL));
+			assertThat(errorMessageList.get(0), is(ERR_MSG_EMPTY_EMAIL));
 		}
 
 		/**
@@ -186,20 +187,22 @@ public class ValidationTest {
 		 * ・メールアドレスが50文字以内である		new User("賀来","asdfghjkaqwe1rty_uioxcvbnz234xcvbnm@678rakus.co.jp","kakuakane")
 		 * 								メールアドレスは50文字以内で入力してください
 		 */
-		@Test
-		public void メールアドレスに50文字より長いアドレスを入力してエラーが返る() {
-			Validation.emailCheck(INVALID_EMAIL);
-			assertTrue(Validation.hasError());
-			assertThat(Validation.getErrorMessageList(),
-					is(ERR_MSG_INVALID_LENGTH));
-		}
-//		/**
-//		 * 長さチェック(min)
-//		 * テスト項目
-//		 * ・メールアドレスが文字以内である		new User("賀来","asdfghjkaqwe1rty_uioxcvbnz234xcvbnm@678rakus.co.jp","kakuakane")
-//		 * 								
-//		 *							メールアドレスは50文字以内で入力してください
-//		 */
+
+//		@Test
+//		public void メールアドレスに50文字より長いアドレスを入力してエラーが返る() {
+//			Validation.emailCheck(INVALID_EMAIL);
+//			assertTrue(Validation.hasError());
+//			assertThat(Validation.getErrorMessageList(),
+//					is(ERR_MSG_INVALID_LENGTH));
+//		}
+		
+		/**
+		 * 長さチェック(min)
+		 * テスト項目
+		 * ・メールアドレスが文字以内である		new User("賀来","asdfghjkaqwe1rty_uioxcvbnz234xcvbnm@678rakus.co.jp","kakuakane")
+		 * 								
+		 *							メールアドレスは50文字以内で入力してください
+		 */
 //		@Test
 //		public void メールアドレスに50文字より長いアドレスを入力してエラーが返る() {
 //			Validation.emailCheck(INVALID_EMAIL);
@@ -215,12 +218,26 @@ public class ValidationTest {
 		 */
 		@Test
 		 public void メールアドレスに不正な形式のアドレスを入力してエラーが返る() {
-		 Validation.emailCheck(INVALID_TYPE_EMAIL);
-		 assertTrue(Validation.hasError());
-		 assertThat(Validation.getErrorMessageList(),
-		 is(ERR_MSG_INVALID_TYPE_EMAIL));
+//		 Validation.emailCheck(INVALID_TYPE_EMAIL);
+//		 assertTrue(Validation.hasError());
+//		 assertThat(Validation.getErrorMessageList(),
+//		 is(ERR_MSG_INVALID_TYPE_EMAIL));
+			Validation.regexEmail(new User("aaa","aaabb",".-..._.--."));
+			assertTrue(Validation.hasError());
+			assertThat(errorMessageList.get(0),
+					is(ERR_MSG_REJEX_EMAIL));
 		 }
-
+		
+		/**
+		 * 複数エラーチェック
+		 * テスト項目					検証値										期待値
+		 * ・メールアドレスとパスワードが不正である		new User("賀来","aaa@aaa","adk13_dkaaa")	メールアドレスが不正です  	パスワードが不正です
+		 * 
+		 */
+		@Test
+		public void メールアドレスとパスワードのエラーが出る(){
+			
+		}
 
 		/**
 		 * 正誤チェック
@@ -233,7 +250,7 @@ public class ValidationTest {
 			System.out.println("notmatchpass is\f" + NOT_MATCH_PASSWORD.getPassword());
 			System.out.println("notmatchpass.size is\f" + Validation.getErrorMessageList().size());
 			assertTrue(Validation.hasError());
-			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_INVALID_PASSWORD));
+			assertThat(errorMessageList.get(0), is(ERR_MSG_INVALID_PASSWORD));
 		}
 
 		/**
@@ -246,7 +263,7 @@ public class ValidationTest {
 		public void パスワードに空文字を入力してエラーが返る() {
 			Validation.passCheck(EMPTY_PASSWORD);
 			assertTrue(Validation.hasError());
-			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_EMPTY_PASSWORD));
+			assertThat(errorMessageList.get(0), is(ERR_MSG_EMPTY_PASSWORD));
 		}
 
 		/**
@@ -259,7 +276,7 @@ public class ValidationTest {
 		public void パスワードが未入力でエラーが返る() {
 			Validation.passCheck(NULL_PASSWORD);
 			assertTrue(Validation.hasError());
-			assertThat(errorMessageList.get(errorMessageList.size()-1), is(ERR_MSG_EMPTY_PASSWORD));
+			assertThat(errorMessageList.get(0), is(ERR_MSG_EMPTY_PASSWORD));
 		}
 		
 		/**
@@ -269,14 +286,14 @@ public class ValidationTest {
 		 * 							期待値
 		 * 							パスワードは8文字以上16文字以内で入力してください
 		 */
-		@Test
-		 public void 既定の文字以下のパスワードを入力してエラーが返る() {
-		 Validation.emailCheck(TOO_SHORT_PASSWORD);
-		 assertTrue(Validation.hasError());
-		 assertThat(Validation.getErrorMessageList(),
-		 is(ERR_MSG_TOO_SHORT_PASSWORD)); }
-		 String NOT_INPUT_MESSAGE = InputValue.notInputPasswordError;
-		 }
+//		@Test
+//		 public void 既定の文字以下のパスワードを入力してエラーが返る() {
+//		 Validation.emailCheck(TOO_SHORT_PASSWORD);
+//		 assertTrue(Validation.hasError());
+//		 assertThat(Validation.getErrorMessageList(),
+//		 is(ERR_MSG_TOO_SHORT_PASSWORD)); }
+//		 String NOT_INPUT_MESSAGE = InputValue.notInputPasswordError;
+//		 }
 
 		/**
 		 * 長さチェック
@@ -285,13 +302,14 @@ public class ValidationTest {
 		 * 							期待値
 		 * 							パスワードは8文字以上16文字以内で入力してください
 		 */
-		@Test
-		 public void 既定の文字以上のパスワードを入力してエラーが返る() {
-		 Validation.emailCheck(TOO_LONG_PASSWORD);
-		 assertTrue(Validation.hasError());
-		 assertThat(Validation.getErrorMessageList(),
-		 is(ERR_MSG_TOO_LOND_PASSWORD));
-		 }
+
+//		@Test
+//		 public void 既定の文字以上のパスワードを入力してエラーが返る() {
+//		 Validation.emailCheck(TOO_LONG_PASSWORD);
+//		 assertTrue(Validation.hasError());
+//		 assertThat(Validation.getErrorMessageList(),
+//		 is(ERR_MSG_TOO_LOND_PASSWORD));
+//		 }
 		
 		/**
 		 * 正規表現チェック
@@ -302,7 +320,10 @@ public class ValidationTest {
 		 */
 		@Test
 		public void パスワードにアルファベットのみを入力してエラーが返る(){
-			
+			Validation.regexPass(new User("aaa","kaku@rakus.co.jp","aacvvhhhh"));
+			 assertTrue(Validation.hasError());
+			 assertThat(errorMessageList.get(0),
+			 is(ERR_MSG_REJEX_PASSWORD));
 		}
 		
 		/**
@@ -315,6 +336,10 @@ public class ValidationTest {
 		 */
 		@Test
 		public void パスワードに数字のみを入力してエラーが返る(){
+			Validation.regexPass(new User("aaa","kaku@rakus.co.jp","174947273"));
+			 assertTrue(Validation.hasError());
+			 assertThat(errorMessageList.get(0),
+			 is(ERR_MSG_REJEX_PASSWORD));
 		}
 		
 		/**
@@ -326,5 +351,19 @@ public class ValidationTest {
 		 */
 		@Test
 		public void パスワードに記号のみを入力してエラーが返る(){
+			Validation.regexPass(new User("aaa","kaku@rakus.co.jp",".-..._.--."));
+			 assertTrue(Validation.hasError());
+			 assertThat(errorMessageList.get(0),
+			 is(ERR_MSG_REJEX_PASSWORD));
+		}
+		/**
+		 * 複数エラーチェック
+		 * テスト項目					検証値											期待値
+		 * ・名前とパスワードが不正である		new User("aaa","kaku@rakus.co.jp","adbhfdacgh")	名前が不正です	パスワードは半角英数字記号すべて含めてください
+		 * 
+		 */
+		@Test
+		public void パスワードと名前のエラーが出る(){
+			
 		}
 }
