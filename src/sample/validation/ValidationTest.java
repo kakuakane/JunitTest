@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sample.common.User;
+
 /***
  * 入力値の検証を行う.
  * 正常系のテスト：Userのプロパティが、下記の条件をすべて満たす。 
