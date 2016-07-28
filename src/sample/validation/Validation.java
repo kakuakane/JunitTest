@@ -43,6 +43,10 @@ public class Validation {
 	public static List<String> getErrorMessageList() {
 		return errorMessageList;
 	}
+	
+	public static void listReset(){
+		errorMessageList.clear();
+	}
 	/**
 	 * 名前の入力チェック
 	 * 
