@@ -24,7 +24,6 @@ import org.junit.Test;
 
 import sample.common.User;
 
-import sample.api.UserApiServlet;
 
 /***
  * 入力値の検証を行う.

@@ -127,7 +127,11 @@ public static final String ERR_MSG_INVALID_PASSWORD = "パスワードが不正�
 		// user.getPassword().length() > 16) {
 		// return "パスワードは8文字以上16文字以内で入力してください";
 
-
+	/**
+	 * パスワードの正規表現
+	 * パスワードのセキュリティ強化.半角英数字記号を含める
+	 * @param user
+	 */
 	public static void regexPass(User user) {
 //		パスワードのセキュリティ強化.半角英数字記号を含める
 		Pattern p = Pattern.compile("(?!^[^0-9]*$)(?!^[^a-z]*$)(?!^[^A-Z]*$)(?!^[^-_.]*$)^([a-zA-Z0-9-_-]+)$");
@@ -137,8 +141,11 @@ public static final String ERR_MSG_INVALID_PASSWORD = "パスワードが不正�
 		}
 	}
 	
+	/**
+	 * メールアドレスの正規表現
+	 * @param user
+	 */
 	public static void regexEmail(User user){
-//		メールアドレスの形式
 		Pattern p = Pattern.compile("[\\w\\.\\-]+@(?:[\\w\\-]+\\.)+[\\w\\-]+");
 		Matcher m = p.matcher(user.getEmail());
 		if (!(m.find())) {
