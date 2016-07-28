@@ -53,6 +53,17 @@ public class Validation {
 	 * @param user
 	 */
 	public static void nameCheck(User user) {
+		//empty or null
+		
+		//length
+		
+		//format(全角)
+		
+		//multiple(?)
+		
+		//valid
+		
+		
 		if (user.getName() == null || user.getName().length() == 0) {
 			errorMessageList.add(ERR_MSG_EMPTY_NAME);
 		} else if (!(user.getName().equals(VALID_NAME))) {
