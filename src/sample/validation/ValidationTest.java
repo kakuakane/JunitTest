@@ -14,17 +14,15 @@ import static sample.validation.InputValue.NULL_EMAIL;
 import static sample.validation.InputValue.NULL_NAME;
 import static sample.validation.InputValue.NULL_PASSWORD;
 import static sample.validation.InputValue.RIGHT_USER;
-import static sample.validation.Validation.ERR_MSG_EMPTY_EMAIL;
-import static sample.validation.Validation.ERR_MSG_EMPTY_NAME;
-import static sample.validation.Validation.ERR_MSG_EMPTY_PASSWORD;
-import static sample.validation.Validation.ERR_MSG_INVALID_EMAIL;
-import static sample.validation.Validation.ERR_MSG_INVALID_NAME;
-import static sample.validation.Validation.ERR_MSG_INVALID_PASSWORD;
+import static sample.validation.Validation.*;
+
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import sample.common.User;
 
 /***
  * 入力値の検証を行う.
@@ -81,9 +79,7 @@ public class ValidationTest {
 			Validation.passCheck(RIGHT_USER);
 			assertFalse(Validation.hasError());
 		}
-
-	
-		 
+		
 		/**
 		 * 正誤チェック
 		 * テスト項目							検証値											期待値
@@ -136,7 +132,7 @@ public class ValidationTest {
 		 * 
 		 */
 		@Test
-		public void 複数のエラーが出る(){
+		public void 名前とメールアドレスのエラーが出る(){
 			
 		}
 			
@@ -210,14 +206,28 @@ public class ValidationTest {
 		 * テスト項目							検証値									期待値
 		 * ・メールアドレスに@と.（ピリオド）が含まれている		new User("賀来","aaabb","kakuakane")		メールアドレスの形式が不正です
 		 */
-//		@Test
-//		 public void メールアドレスに不正な形式のアドレスを入力してエラーが返る() {
+		@Test
+		 public void メールアドレスに不正な形式のアドレスを入力してエラーが返る() {
 //		 Validation.emailCheck(INVALID_TYPE_EMAIL);
 //		 assertTrue(Validation.hasError());
 //		 assertThat(Validation.getErrorMessageList(),
 //		 is(ERR_MSG_INVALID_TYPE_EMAIL));
-//		 }
-
+			Validation.regexEmail(new User("aaa","aaabb",".-..._.--."));
+			assertTrue(Validation.hasError());
+			assertThat(errorMessageList.get(0),
+					is(ERR_MSG_REJEX_EMAIL));
+		 }
+		
+		/**
+		 * 複数エラーチェック
+		 * テスト項目					検証値										期待値
+		 * ・メールアドレスとパスワードが不正である		new User("賀来","aaa@aaa","adk13_dkaaa")	メールアドレスが不正です  	パスワードが不正です
+		 * 
+		 */
+		@Test
+		public void メールアドレスとパスワードのエラーが出る(){
+			
+		}
 
 		/**
 		 * 正誤チェック
@@ -299,7 +309,10 @@ public class ValidationTest {
 		 */
 		@Test
 		public void パスワードにアルファベットのみを入力してエラーが返る(){
-			
+			Validation.regexPass(new User("aaa","kaku@rakus.co.jp","aacvvhhhh"));
+			 assertTrue(Validation.hasError());
+			 assertThat(errorMessageList.get(0),
+			 is(ERR_MSG_REJEX_PASSWORD));
 		}
 		
 		/**
@@ -312,6 +325,10 @@ public class ValidationTest {
 		 */
 		@Test
 		public void パスワードに数字のみを入力してエラーが返る(){
+			Validation.regexPass(new User("aaa","kaku@rakus.co.jp","174947273"));
+			 assertTrue(Validation.hasError());
+			 assertThat(errorMessageList.get(0),
+			 is(ERR_MSG_REJEX_PASSWORD));
 		}
 		
 		/**
@@ -323,5 +340,19 @@ public class ValidationTest {
 		 */
 		@Test
 		public void パスワードに記号のみを入力してエラーが返る(){
+			Validation.regexPass(new User("aaa","kaku@rakus.co.jp",".-..._.--."));
+			 assertTrue(Validation.hasError());
+			 assertThat(errorMessageList.get(0),
+			 is(ERR_MSG_REJEX_PASSWORD));
+		}
+		/**
+		 * 複数エラーチェック
+		 * テスト項目					検証値											期待値
+		 * ・名前とパスワードが不正である		new User("aaa","kaku@rakus.co.jp","adbhfdacgh")	名前が不正です	パスワードは半角英数字記号すべて含めてください
+		 * 
+		 */
+		@Test
+		public void パスワードと名前のエラーが出る(){
+			
 		}
 }
